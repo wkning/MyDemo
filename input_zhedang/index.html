@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title>input在ios下遮挡问题</title>
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+	<style type="text/css">
+		*{
+			margin: 0;
+			padding: 0
+		}
+		header{
+			height: 64px;
+			border-bottom: 1px solid #ccc;
+			position: fixed;
+			top: 0;
+			left: 0;
+			right: 0;
+			background-color: cyan;
+		}
+		nav{
+			display: flex;
+			flex-direction: row;
+			align-items: center;
+			justify-content: space-around;
+		}
+		nav{
+			height: 64px;
+			display: flex;
+			align-items: center;
+		}
+		content{
+			position: absolute;
+			top: 65px;
+			left: 0;
+			right: 0;
+			bottom: 65px;
+			background-color: #ccc;
+		}
+		.homeBg{
+			height: 200px;
+			width: 100%;
+			border-bottom: 1px solid black;
+		}
+		.show_chart{
+			top: 201px;
+			bottom: 1px;
+			left: 0;
+			right: 0;
+			position: absolute;
+			background-color: white;
+			overflow: scroll; 
+		}
+		footer{
+			position: absolute;
+			bottom: 0;
+			left: 0;
+			right: 0;
+			height: 64px;
+			border-top: 1px solid #ccc;
+			background-color: cyan;
+		}
+		.message_div{
+			display: flex;
+			flex-direction: row;
+		}
+		.message_iptn{
+			height: 64px;
+			display: flex;
+			align-items: center;
+			flex: 9;
+			padding:0 20px;
+		}
+		.message_iptn input{
+			border:none;
+			width: 100%;
+			outline: none;
+			font-size: 15px;
+			line-height: 40px; 
+		}
+		.send{
+			flex: 3;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+		}
+		.send_btn{
+			width: 60px;
+			height: 40px;
+			line-height: 40px;
+			text-align: center;
+			border: 1px solid #ccc;
+			border-radius: 5px;
+		}
+		.chat_item{
+			height: 40px;
+			display: flex;
+			flex-direction: row;
+			width: 100%;
+			padding: 10px 0;
+			width: 100%;
+		}
+		.chat_item1{
+			display: flex;
+			height: 40px;
+			width: 40px;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid #ccc;
+			border-radius: 20px;
+			margin:5px 10px;
+		}
+		.chat_item2{
+			display:flex;
+			line-height: 40px;
+			margin:5px 10px;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<header class="header">
+			<nav>
+				<div>导航一</div>
+				<div>导航二</div>
+				<div>导航三</div>
+			</nav>
+		</header>
+		<content>
+			<section>
+				<div class="homeBg"></div>
+			</section>
+			<section>
+				<div class="show_chart">
+					<div class="chat_item" v-for="item in all_text">
+						<span class="chat_item1">{{item.name}}</span>
+						<span class="chat_item2">{{item.textVal}}</span>
+					</div>
+				</div>
+			</section>
+		</content>
+		<footer>
+			<div class="message_div">
+				<div class="message_iptn">
+					<input type="text" ref="text" v-model="val" v-on:focus="focusIpt" v-on:blur="blurIpt">
+				</div>
+				<div class="send">
+					<div class="send_btn" v-on:click="send_btn">发送</div>
+				</div>
+			</div>
+		</footer>
+	</div>
+	<script type="text/javascript">
+		var app = new Vue({
+			el:'#app',
+			data:{
+				timer:null,
+				val:'',
+				all_text:[]
+			},
+			methods:{
+				focusIpt() {
+					this.timer = setInterval(function() {  
+			          document.body.scrollTop = document.body.scrollHeight  
+			       }, 100)  
+				},
+				blurIpt(){
+					clearInterval(this.timer)  
+				},
+				send_btn(){
+					var obj={};
+					obj.textVal=this.val;
+					obj.name='wkn'
+					this.all_text.push(obj)
+					console.log(obj)
+					console.log(this.all_text)
+				}
+			},
+			updated(){  
+					let pannel = this.$refs.text;
+					//监听输入框，动态增加输入框高度  
+					pannel.style.height='auto';    
+					pannel.style.height = pannel.scrollHeight+ 'px';    
+				},
+		})
+	</script>
+</body>
+</html>

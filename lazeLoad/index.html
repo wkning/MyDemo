@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	 <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
+	<title>lazeLoad</title>
+	<style type="text/css">
+		* {
+			padding: 0;
+			margin: 0;
+			text-decoration: none;
+			list-style: none;
+		}
+		.layout {
+			margin: 0 auto;
+			width: 300px
+		}
+		.lazyload img {
+			width: 300px;
+			height: 300px;
+		}
+		.img-ct {
+			display: flex;
+			flex-direction: column;
+		}
+	</style>
+	<script type="text/javascript" src="js/jquery.min.js"></script>
+</head>
+<body>
+	<div class="lazyload">
+	  <div class="layout">
+		<ul class="img-ct">
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+			<li class="item">
+				<a href="javascript:void(0)"><img data-img="box2.png" src="box3.png"></a>
+			</li>
+		</ul>
+	  </div>
+	</div>
+	<script type="text/javascript">
+		var lazyLoad = (function(){
+			var clock;
+			function init(){
+				//监听用户滚动事件
+				$(window).on("scroll", function(){
+					if (clock) {
+						clearTimeout(clock);
+					}
+					clock = setTimeout(function(){
+						checkShow();
+					}, 200);
+				})
+				checkShow();
+			}
+			
+			//当前图片是否加载
+			function checkShow(){
+				$(".lazyload img").each(function(){
+					var $cur =$(this);
+					if($cur.attr('isLoaded')){
+		        		return;
+		      		}
+					if(shouldShow($cur)){
+						showImg($cur);
+					}
+				})
+			}
+			//判断一个元素是否在可视区域内，如果在返回true，不在返回fasle。
+			function shouldShow($node){
+				var scrollH = $(window).scrollTop(),
+					winH = $(window).height(),
+					top = $node.offset().top;
+				if(top < winH + scrollH){
+			  		return true;
+			  	}else{
+			  		return false;
+			  	}
+			}
+			//设置图片的加载，data-img只是临时储存一个路径，将src替换为data—img的路径，并且加载状态设置为true
+			function showImg($node){
+		    	$node.attr('src', $node.attr('data-img'));
+		    	$node.attr('isLoaded', true);
+			}
+			return {
+				init: init
+			}
+	})()
+	lazyLoad.init();
+	</script>
+</body>
+</html>
